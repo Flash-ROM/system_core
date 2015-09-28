@@ -69,6 +69,7 @@ LOCAL_STATIC_LIBRARIES := \
     libcutils \
     libgtest_host \
 
+ifneq (,$(filter linux darwin,$(HOST_OS)))
 # libf2fs_dlutils_host will dlopen("libf2fs_fmt_host_dyn")
 LOCAL_CFLAGS_linux := -DUSE_F2FS
 LOCAL_LDFLAGS_linux := -ldl -rdynamic -Wl,-rpath,.
@@ -87,7 +88,7 @@ LOCAL_SHARED_LIBRARIES :=
 include $(BUILD_HOST_EXECUTABLE)
 
 my_dist_files := $(LOCAL_BUILT_MODULE)
-ifeq ($(HOST_OS),linux)
+ifneq (,$(filter linux darwin,$(HOST_OS)))
 my_dist_files += $(HOST_LIBRARY_PATH)/libf2fs_fmt_host_dyn$(HOST_SHLIB_SUFFIX)
 endif
 $(call dist-for-goals,dist_files sdk win_sdk,$(my_dist_files))
